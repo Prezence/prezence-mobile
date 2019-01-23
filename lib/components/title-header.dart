@@ -1,3 +1,6 @@
+// Prezence - Copyright 2019 The Innovation Group
+// @author Kenneth Reilly <kenneth@innovationgroup.tech>
+
 import 'package:flutter/material.dart';
 
 class AnimatedTitleWidget extends AnimatedWidget {
@@ -26,7 +29,7 @@ class AnimatedTitleWidget extends AnimatedWidget {
 				children : <Widget>[
 					Text(
 						'Pre',
-						style: _style.copyWith(color: Colors.teal)
+						style: _style.copyWith(color: Colors.cyan)
 					),
 					Text(
 						'zen', 
@@ -34,11 +37,10 @@ class AnimatedTitleWidget extends AnimatedWidget {
 					),
 					Text(
 						'ce', 
-						style: _style.copyWith(color: Colors.teal)
+						style: _style.copyWith(color: Colors.cyan)
 					),
 				]
 			)
-
 		);
 	}
 }
@@ -62,14 +64,14 @@ class TitleHeaderState extends State<TitleHeader> with SingleTickerProviderState
 
 		super.initState();
 	
-		_animationController = AnimationController(vsync: this, duration: Duration(milliseconds:3200));
+		_animationController = AnimationController(vsync: this, duration: Duration(milliseconds:1200));
 		_animationController.forward();
 	}
 
 	@override
 	Widget build(BuildContext context) {
 
-		_colorTween = ColorTween(begin: Colors.teal, end: Colors.orange)
+		_colorTween = ColorTween(begin: Colors.cyan, end: Colors.orange)
 			.animate(_animationController)
 				..addListener(() { setState(() { }); });
 

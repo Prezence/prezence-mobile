@@ -45,6 +45,7 @@ flutter:
 
   assets:
       - assets/videos/zenstones.mp4
+      - assets/images/icon-home.png
       - assets/images/icon-headphones.png
       - assets/images/icon-meditation-bowl.png
 
