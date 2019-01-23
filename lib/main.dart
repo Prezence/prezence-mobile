@@ -1,7 +1,8 @@
+import 'dart:async';
+import 'dart:core';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import './views/home.dart';
-
-void main() => runApp(Prezence());
 
 class Prezence extends StatelessWidget {
 
@@ -12,8 +13,14 @@ class Prezence extends StatelessWidget {
 
         return MaterialApp(
             title: Prezence.title,
-            theme: ThemeData(primarySwatch: Colors.blue),
+            theme: ThemeData(primarySwatch: Colors.brown),
           	home: HomeScreen(title: Prezence.title),
       	);
     }
+}
+
+Future<void> main() async {
+
+	await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+	runApp(Prezence());
 }

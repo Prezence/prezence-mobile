@@ -18,23 +18,27 @@ class AnimatedTitleWidget extends AnimatedWidget {
 		final TextStyle _style = Theme.of(context).textTheme.display2
 			.copyWith( fontWeight: FontWeight.w200, shadows: [ _shadow ]);
 
-		return Row(
+		return ConstrainedBox(
 
-			mainAxisAlignment: MainAxisAlignment.center,
-			children : <Widget>[
-				Text(
-					'Pre',
-					style: _style.copyWith(color: Colors.teal)
-				),
-				Text(
-					'zen', 
-					style: _style.copyWith(color: animation.value)
-				),
-				Text(
-					'ce', 
-					style: _style.copyWith(color: Colors.teal)
-				),
-			]
+			constraints: BoxConstraints.expand(height: 400),
+			child: Row(
+				mainAxisAlignment: MainAxisAlignment.center,
+				children : <Widget>[
+					Text(
+						'Pre',
+						style: _style.copyWith(color: Colors.teal)
+					),
+					Text(
+						'zen', 
+						style: _style.copyWith(color: animation.value)
+					),
+					Text(
+						'ce', 
+						style: _style.copyWith(color: Colors.teal)
+					),
+				]
+			)
+
 		);
 	}
 }
@@ -58,7 +62,7 @@ class TitleHeaderState extends State<TitleHeader> with SingleTickerProviderState
 
 		super.initState();
 	
-		_animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 1600));
+		_animationController = AnimationController(vsync: this, duration: Duration(milliseconds:3200));
 		_animationController.forward();
 	}
 
