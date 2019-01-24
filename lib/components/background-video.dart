@@ -1,3 +1,6 @@
+// Prezence - Copyright 2019 The Innovation Group
+// @author Kenneth Reilly <kenneth@innovationgroup.tech>
+
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 

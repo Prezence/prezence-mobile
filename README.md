@@ -1,16 +1,18 @@
-# prezence
+# Prezence
 
-A simple open-source meditation app developed with Flutter
+A simple open-source meditation app developed with Flutter 
+[prezence.github.io](https://prezence.github.io)
 
-## Getting Started
+### Introduction
 
-This project is a starting point for a Flutter application.
+This repository contains source code for the Prezence meditation for Android and iOS. 
 
-A few resources to get you started if this is your first Flutter project:
+### Contributing
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+For an introduction to Flutter or Dart, see below:
+* [Dart](https://dartlang.org)
+* [Flutter](https://flutter.io)
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+
+### License
+The source code for this application is provided under the MIT license. 
