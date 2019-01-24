@@ -2,6 +2,8 @@
 // @copyright Copyright 2019 The Innovation Group
 // @author Kenneth Reilly <kenneth@innovationgroup.tech>
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import '../components/background-video.dart';
 import '../types/screen-view.dart';
@@ -26,11 +28,16 @@ class _DisplayContainerState extends State<DisplayContainer> with SingleTickerPr
 
 	int _selected;
 
+	get animation { return _animation; }
+
+	Animation _animation;
+
 	@override
 	void initState() {
 
 		super.initState();
 		_controller = new TabController(vsync: this, length: widget.screens.length);
+		_animation = _controller.animation;
 	}
 
 	@override
@@ -43,16 +50,13 @@ class _DisplayContainerState extends State<DisplayContainer> with SingleTickerPr
 	@override
 	Widget build(BuildContext context) {
 
-		Size size = MediaQuery.of(context).size;
-
-		_controller.addListener(() {
-			print("changed index to: " + _controller.index.toString());
-			setState(() { _selected = _controller.index; }); 
-		});
-
 		var _index = 0;
 		var _tabs = widget.screens.map<Tab>((ScreenView screen, { int index }) {
-			Tab _tab = Tab(child: new CustomTab(index: _index, icon: screen.icon, selectedIndex: selected));
+			Tab _tab = Tab(
+				// child: new CustomTab(index: _index, icon: screen.icon, selectedIndex: selected)
+				// text: "ASDF",
+				icon: new CustomTab(index: _index, icon: screen.icon, selectedIndex: selected, animation: _animation),
+			);
 			_index++;
 			return _tab;
 		}).toList();
@@ -72,28 +76,20 @@ class _DisplayContainerState extends State<DisplayContainer> with SingleTickerPr
 						controller: _controller,
 						children: widget.screens.map<Widget>((ScreenView screen) { return screen.widget; }).toList(),
 					),
-					NotificationListener(
 
-						onNotification: (Notification notification) { print("notification: " + notification.toString()); },
-
-						child: Padding(
-
-							padding: const EdgeInsets.fromLTRB(0, 0, 0, 2),
-							child: Column(
-								mainAxisAlignment: MainAxisAlignment.end,
-								children: [
-									TabBar(
-										labelPadding: EdgeInsets.zero,
-										controller: _controller,
-										indicatorWeight: 4,
-										tabs: _tabs,
-										indicatorPadding: EdgeInsets.all(1),
-										
-										
-									)
-								]
+					Column(	
+						mainAxisAlignment: MainAxisAlignment.end,
+						crossAxisAlignment: CrossAxisAlignment.stretch,
+						children: [
+							
+							TabBar(
+								labelPadding: EdgeInsets.zero,
+								controller: _controller,
+								indicatorWeight: 4,
+								tabs: _tabs,
+								indicatorPadding: EdgeInsets.all(1)
 							)
-						)
+						]
 					)
 				]	
 			)
@@ -101,18 +97,6 @@ class _DisplayContainerState extends State<DisplayContainer> with SingleTickerPr
     }
 }
 
-class CustomTabBar extends TabBar {
-
-	CustomTabBar({
-		Key key,
-		@required List<Tab> tabs
-	}) : super(key: key, tabs: tabs);
-
-	@override
-	getPreferredSize() {
-
-	}
-}
 
 class CustomTab extends StatefulWidget {
 
@@ -120,15 +104,18 @@ class CustomTab extends StatefulWidget {
 		Key key,
 		@required Image icon,
 		@required int index,
-		@required int selectedIndex
+		@required int selectedIndex,
+		@required Animation animation
 
-	}) : _icon = icon, _index = index, _selectedIndex = selectedIndex, super(key: key);
+	}) : _icon = icon, _index = index, _selectedIndex = selectedIndex, _animation = animation, super(key: key);
 
 	final Image _icon;
 
 	final int  _index;
 
 	final int _selectedIndex;
+
+	final Animation _animation;
 
   @override
   CustomTabState createState() {
@@ -143,32 +130,47 @@ class CustomTabState extends State<CustomTab> {
 	@override
 	Widget build(BuildContext context) {
 
-		return Container(
-			height: 320,
-		  	constraints: BoxConstraints.expand(),
-			decoration: BoxDecoration(
-				color: Color.fromARGB(128, 32, 16, 32),
+		return AnimatedBuilder(
+			animation: widget._animation,
+			child: widget._icon,
+			builder: (BuildContext context, Widget child) {
+				
+				int index = widget._index;
+				double value = widget._animation.value;
+				double delta = value - index + 1;
 
-				// border: Border.all(color: Colors.teal[600]),
-				
-				// boxShadow: [
-				// 	BoxShadow(
-				// 		color: Color.fromARGB(128, 16, 32, 16),
-				// 		blurRadius: 2,
-				// 		offset: Offset(3.0, 3.0)
-				// 	)
-				// ]
-			),
-			child: Padding(
-				
-				padding: EdgeInsets.only(bottom: 6, top: 6),
-				child: Opacity(
-					opacity: isSelected ? 0.8 : 0.4,
-					child: widget._icon
-				)
-			)
-		
+				double opacity = (delta >= 0.0 && delta <= 1.0) 
+					? delta
+					: (delta > 1 && delta < 2) ? (2 - delta) : 0;
+
+				if (opacity > 0.84) { opacity = 0.84; }
+				if (opacity < 0.26) { opacity = 0.26; }
+				return Container(
+
+					constraints: BoxConstraints.expand(),
+					decoration: BoxDecoration(
+						gradient: LinearGradient(
+							begin: Alignment.topCenter,
+							end: Alignment.bottomCenter,
+							colors: [
+								const Color.fromARGB(8, 16, 32, 16),
+								const Color.fromARGB(192, 32, 16, 32)
+							]
+						)
+					),
+					child: Padding(
+						
+						padding: EdgeInsets.only(bottom: 4, top: 8),
+						child: Opacity(
+							opacity: opacity,
+							child: widget._icon
+						)
+					)
+				);
+			}
 		);
+
+		
 
 		// (_selectedIndex == _index) 
 		// 	? 
