@@ -1,6 +1,7 @@
 # Prezence
 
-A simple open-source meditation app developed with Flutter 
+A simple open-source meditation app developed with Flutter
+
 [prezence.github.io](https://prezence.github.io)
 
 ### Introduction
