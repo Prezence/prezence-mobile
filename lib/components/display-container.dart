@@ -78,9 +78,13 @@ class _DisplayContainerState extends State<DisplayContainer> with SingleTickerPr
 					
 					BackgroundVideo(assetName: 'assets/videos/zenstones.mp4'),
 					
-					TabBarView(
-						controller: _controller,
-						children: widget.screens.map<Widget>((ScreenView screen) { return screen.widget; }).toList(),
+					Container(
+						padding: EdgeInsets.only(bottom: 48),
+						constraints: BoxConstraints.expand(),
+						child: TabBarView(
+							controller: _controller,
+							children: widget.screens.map<Widget>((ScreenView screen) { return screen.widget; }).toList(),
+						),
 					),
 
 					Column(	

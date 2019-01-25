@@ -3,23 +3,304 @@
 
 import 'dart:core';
 import 'package:flutter/material.dart';
+import '../components/subpage-header.dart';
+import '../types/util.dart';
 
-class MeditationTimedScreen extends StatelessWidget {
+class MeditationTimedScreen extends StatefulWidget {
 
-	const MeditationTimedScreen({
-		Key key,
-	}) : super(key: key);
+	const MeditationTimedScreen({ Key key }) : super(key: key);
+
+	@override
+	MeditationTimedScreenState createState() => new MeditationTimedScreenState();
+}
+
+class MeditationTimedScreenState extends State<MeditationTimedScreen> {
+
+	void _onChangeDuration(Duration duration) {
+
+		print(duration);
+	}
+
+	@override initState() {
+
+		super.initState();
+	}
 
 	@override
 	Widget build(BuildContext context) {
+
+		Size _deviceSize = MediaQuery.of(context).size;
+		double _width = _deviceSize.width;
+		double _root = _width / 1.616;
+		double _rootQuarter = _root / 4;
+		double _rootEighth = _root / 8;
+		double _rootThird = _root / 3;
+		double _rootHalf = _root / 2;
 
 		return Column(
 
 			mainAxisAlignment: MainAxisAlignment.spaceBetween,
 			children: <Widget>[
 
-							
-			],
+				Container(
+					constraints: BoxConstraints.expand(height: _rootThird)
+				),
+
+				SubPageHeader(text: 'Set Timer'),
+
+				Container(
+					constraints: BoxConstraints.expand(height: _rootQuarter)
+				),
+
+				DurationPicker(
+					rootSize: _root,
+					duration: Duration(minutes: 20),
+					onChangeDuration: _onChangeDuration
+				),
+
+				Container(
+					margin: EdgeInsets.all(36),
+					constraints: BoxConstraints.expand(height: 48),
+					child: RaisedButton(
+						child: Text(
+							'start',
+								style: TextStyle(
+									fontWeight: FontWeight.w200, fontSize: 20
+								)
+							),
+						textTheme: ButtonTextTheme.primary,
+						textColor: Colors.orange[50],
+						color: Colors.blueGrey[900],
+						highlightColor: Colors.blueGrey[800],
+						splashColor: Colors.blueGrey[300],
+						elevation: 4,
+						disabledElevation: 0,
+						highlightElevation: 8,
+						onPressed:  () { print('pressed me'); },
+					)
+				)
+			]
+		);
+	}
+}
+
+class DurationPicker extends StatefulWidget {
+
+	const DurationPicker({
+		Key key,
+		@required Duration duration,
+		@required double rootSize,
+		@required Function onChangeDuration
+	}) : _root = rootSize, _duration = duration, _onChangeDuration = onChangeDuration, super(key: key);
+
+	final double _root;
+	final Duration _duration;
+	final Function _onChangeDuration;
+
+	static double clipFactor = 0.82;
+	static double itemExtent = 56.0;
+	static double diameterRatio = 2.0;
+
+	@override
+	DurationPickerState createState() => new DurationPickerState();
+}
+
+class DurationPickerState extends State<DurationPicker> {
+
+	FixedExtentScrollController _scrollController1;
+	FixedExtentScrollController _scrollController2;
+
+	List<Widget> get _hourItems {
+
+		Iterable<int> range = Util.range(0, 10);
+		Iterable<Widget> _widgets = range.map((i) {
+
+			return new TimePickerCard(index: i, listenable: _scrollController1);
+		});
+		
+		return _widgets.toList();
+	}
+
+	List<Widget> get _minuteItems {
+
+		Iterable<int> range = Util.range(0, 60);
+		Iterable<Widget> _widgets = range.map((i) {
+
+			return new TimePickerCard(index: i, listenable: _scrollController2);
+		});
+		
+		return _widgets.toList();
+	}
+
+	int _hours;
+	int _minutes;
+
+	@override
+	void initState() {
+
+		super.initState();
+
+		int totalMinutes = widget._duration.inMinutes;
+		_hours = (totalMinutes / 60).floor();
+		_minutes = (totalMinutes % 60);
+
+		_scrollController1 = new FixedExtentScrollController(initialItem: _hours);
+		_scrollController2 = new FixedExtentScrollController(initialItem: _minutes);
+	}
+
+	void _onChangeHours(int) {
+
+		print(int);
+	}
+
+	void _onChangeMinutes(int) {
+		
+		print(int);
+	}
+
+	@override
+	Widget build(BuildContext context) {
+
+
+
+		return Row(
+			mainAxisAlignment: MainAxisAlignment.center,
+			children: <Widget>[
+
+				new DurationPickerComponent(
+					parent: widget, 
+					controller: _scrollController1,
+					items: _hourItems,
+					onChange: _onChangeHours,
+					alignment: Alignment.topLeft
+				),
+
+				new DurationPickerComponent(
+					parent: widget, 
+					controller: _scrollController2,
+					items: _minuteItems,
+					onChange: _onChangeMinutes,
+					alignment: Alignment.topRight
+				)
+			]
+		);
+	}
+}
+
+class DurationPickerComponent extends StatelessWidget {
+
+	const DurationPickerComponent({
+		Key key,
+		@required this.parent,
+		@required this.onChange,
+		@required this.alignment,
+		@required FixedExtentScrollController controller,
+		@required List<Widget> items,
+	}) : _controller = controller, _items = items, super(key: key);
+
+	final DurationPicker parent;
+	final Function onChange;
+	final Alignment alignment;
+	final FixedExtentScrollController _controller;
+	final List<Widget> _items;
+
+	@override
+	Widget build(BuildContext context) {
+
+		return Padding(
+
+			padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+			child: ClipRRect(
+
+				borderRadius: BorderRadius.all(Radius.circular(4.0)),
+				child: Align(
+
+					widthFactor: DurationPicker.clipFactor, 
+					alignment: alignment,
+					child: ConstrainedBox(
+
+						constraints: BoxConstraints.expand(
+							height: (parent._root * 0.92), 
+							width: (parent._root * 0.76) 
+						),
+
+						child: ListWheelScrollView(
+							controller: _controller,
+							children: _items,
+							physics: FixedExtentScrollPhysics(),
+							itemExtent: DurationPicker.itemExtent,
+							diameterRatio: DurationPicker.diameterRatio,
+							onSelectedItemChanged: onChange
+						),
+					)
+				)
+			),
+		);
+  	}
+}
+
+class TimePickerCard extends AnimatedWidget {
+
+	const TimePickerCard({
+		Key key, @required int index, @required FixedExtentScrollController listenable
+	}) : _index = index, super(key: key, listenable: listenable);
+
+	final int _index;
+
+	int get selectedItem {
+
+		final FixedExtentScrollController controller = listenable;
+			
+		try { return controller.selectedItem; }
+		catch (e) { return controller.initialItem; }
+	}
+
+	double get itemOpacity {
+
+		int _selectedItem = selectedItem;
+
+		if (_selectedItem == _index) { return 0.88; }
+		if ((_selectedItem - 1 == _index || _selectedItem + 1 == _index)) { return 0.4; }
+		return 0.2;
+	}
+
+	double get cardOpacity {
+
+		int _selectedItem = selectedItem;
+
+		if (_selectedItem == _index) { return 0.54; }
+		if ((_selectedItem - 1 == _index || _selectedItem + 1 == _index)) { return 0.48; }
+		return 0.24;
+	}
+
+	@override
+	Widget build(BuildContext context) {				
+
+		return Card(
+			color: Colors.black.withOpacity(cardOpacity),
+			child: Row(
+
+				children: <Widget>[
+					
+					Expanded(
+						child: Row(
+
+							mainAxisAlignment: MainAxisAlignment.center,
+							children: <Widget>[
+
+								Text(
+									_index.toString(),
+									style: TextStyle(
+										color: Colors.orange[50].withOpacity(itemOpacity),
+										fontSize: 22,
+										fontWeight: FontWeight.w300
+									)
+								)
+							]
+						)
+					)
+				]
+			)
 		);
 	}
 }

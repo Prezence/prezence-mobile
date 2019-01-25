@@ -3,9 +3,9 @@
 
 import 'package:flutter/material.dart';
 
-class AnimatedTitleWidget extends AnimatedWidget {
+class AnimatedStatsWidget extends AnimatedWidget {
 
-	AnimatedTitleWidget({ Key key, Animation<Color> animation }) 
+	AnimatedStatsWidget({ Key key, Animation<Color> animation }) 
 		: super ( key: key, listenable: animation );
 	
 	Widget build(BuildContext context) {
@@ -23,37 +23,30 @@ class AnimatedTitleWidget extends AnimatedWidget {
 
 		return ConstrainedBox(
 
-			constraints: BoxConstraints.expand(height: 400),
+			constraints: BoxConstraints.expand(height: 200),
 			child: Row(
 				mainAxisAlignment: MainAxisAlignment.center,
 				children : <Widget>[
+				
 					Text(
-						'Pre',
-						style: _style.copyWith(color: Colors.cyan)
-					),
-					Text(
-						'zen', 
+						'Total minutes meditated: ' , 
 						style: _style.copyWith(color: animation.value)
-					),
-					Text(
-						'ce', 
-						style: _style.copyWith(color: Colors.cyan)
-					),
+					)
 				]
 			)
 		);
 	}
 }
 
-class TitleHeader extends StatefulWidget {
+class HomeStats extends StatefulWidget {
 
-	const TitleHeader({ Key key }) : super(key: key);
+	const HomeStats({ Key key }) : super(key: key);
 
 	@override
-	TitleHeaderState createState() => new TitleHeaderState();
+	HomeStatsState createState() => new HomeStatsState();
 }
 
-class TitleHeaderState extends State<TitleHeader> with SingleTickerProviderStateMixin {
+class HomeStatsState extends State<HomeStats> with SingleTickerProviderStateMixin {
 
 	AnimationController _animationController;
 
@@ -71,10 +64,10 @@ class TitleHeaderState extends State<TitleHeader> with SingleTickerProviderState
 	@override
 	Widget build(BuildContext context) {
 
-		_colorTween = ColorTween(begin: Colors.cyan, end: Colors.orange)
+		_colorTween = ColorTween(begin: Colors.cyan, end: Colors.orange[50])
 			.animate(_animationController)
 				..addListener(() { setState(() { }); });
 
-		return AnimatedTitleWidget(animation: _colorTween);
+		return AnimatedStatsWidget(animation: _colorTween);
 	}
 }
