@@ -13,9 +13,7 @@ class NavTabIcon extends StatefulWidget {
 	}) : _icon = icon, _index = index, _animation = animation, super(key: key);
 
 	final Image _icon;
-
 	final int  _index;
-
 	final Animation _animation;
 
 	@override

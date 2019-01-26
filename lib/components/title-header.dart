@@ -8,15 +8,15 @@ class AnimatedTitleWidget extends AnimatedWidget {
 	AnimatedTitleWidget({ Key key, Animation<Color> animation }) 
 		: super ( key: key, listenable: animation );
 	
+	final Shadow _shadow = Shadow(
+		offset: Offset(2.0, 2.0),
+		blurRadius: 3.0,
+		color: Color.fromARGB(255, 0, 12, 24),
+	);
+
 	Widget build(BuildContext context) {
 
 		final Animation<Color> animation = listenable;
-
-		final Shadow _shadow = Shadow(
-			offset: Offset(2.0, 2.0),
-			blurRadius: 3.0,
-			color: Color.fromARGB(255, 0, 12, 24),
-		);
 
 		final TextStyle _style = Theme.of(context).textTheme.display2
 			.copyWith( fontWeight: FontWeight.w200, shadows: [ _shadow ]);
@@ -56,7 +56,6 @@ class TitleHeader extends StatefulWidget {
 class TitleHeaderState extends State<TitleHeader> with SingleTickerProviderStateMixin {
 
 	AnimationController _animationController;
-
 	Animation _colorTween;
 
 	@override

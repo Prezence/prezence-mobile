@@ -60,14 +60,15 @@ class SmartButton extends StatelessWidget {
 					),
 				textTheme: ButtonTextTheme.primary,
 				textColor: Colors.orange[50],
-				color: Colors.blueGrey[900],
-				highlightColor: Colors.blueGrey[800],
-				splashColor: Colors.blueGrey[300],
-				disabledColor: Colors.blueGrey[900].withOpacity(0.4),
+				color: Colors.black54,
+				highlightColor: Colors.yellow[700].withOpacity(0.36),
+				splashColor: Colors.yellow[50].withOpacity(0.48),
+				disabledColor: Colors.black26,
 				elevation: 3,
 				disabledElevation: 1,
 				highlightElevation: 6,
 				onPressed: _onPressed,
+				
 			)
 		);
 	}

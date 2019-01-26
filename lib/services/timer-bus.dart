@@ -50,6 +50,8 @@ class TimerBus {
 
 	static void init(Duration duration) {
 		
+		if (TimerBus._timer != null) { 
+			TimerBus._timer.cancel();}
 		TimerBus._duration = TimerBus._initialDuration = duration;
 	}
 

@@ -3,12 +3,10 @@
 
 import 'dart:core';
 import 'package:flutter/material.dart';
-import '../components/subpage-header.dart';
 import '../components/smart-button.dart';
 import '../components/countdown-gauge.dart';
 import '../services/timer-bus.dart';
 import '../types/geometry.dart';
-import '../types/util.dart';
 
 class TimerCountdownScreen extends StatefulWidget {
 
@@ -62,14 +60,14 @@ class TimerCountdownScreenState extends State<TimerCountdownScreen> {
 								 	? TimerBus.stop() 
 									: TimerBus.start();
 
-								setState(() {
-								  
-								});
+								setState(() { });
 							}
 						),
 						SmartButton(
 							text: 'cancel',
-							onPressed: () { 
+							onPressed: () {
+
+								TimerBus.clear();
 								Navigator.pop(context); 
 							}
 						)
