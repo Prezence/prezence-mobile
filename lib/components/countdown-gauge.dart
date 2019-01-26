@@ -46,10 +46,10 @@ class CountdownGaugeState extends State<CountdownGauge> with SingleTickerProvide
 	@override
 	Widget build(BuildContext context) {
 
-		int totalMinutes = widget._duration.inMinutes;
+		// int totalMinutes = widget._duration.inMinutes;
 		int totalSeconds = widget._duration.inSeconds;
-		int _hours = (totalMinutes / 60).floor();
-		int _minutes = (totalSeconds / 60).floor();
+		int _hours =  widget._duration.inHours;
+		int _minutes = ((totalSeconds / 60) - _hours * 60).floor();
 		int _seconds =  (totalSeconds  %  60);
 
 		Geometry _geometry = new Geometry(context);
