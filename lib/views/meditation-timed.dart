@@ -4,6 +4,9 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import '../components/subpage-header.dart';
+import '../components/smart-button.dart';
+import '../services/timer-bus.dart';
+import '../types/geometry.dart';
 import '../types/util.dart';
 
 class MeditationTimedScreen extends StatefulWidget {
@@ -16,86 +19,70 @@ class MeditationTimedScreen extends StatefulWidget {
 
 class MeditationTimedScreenState extends State<MeditationTimedScreen> {
 
-	void _onChangeDuration(Duration duration) {
+	void _onPressStart() {
 
-		print(duration);
+		TimerBus.init(_duration);
+		Navigator.pushNamed(context, '/timer'); 
 	}
 
-	@override initState() {
+	Duration _duration = Duration(minutes: 20);
 
-		super.initState();
+	void _onChangeDuration(Duration duration) {
+
+		_duration = duration;
+		setState(() {  });
 	}
 
 	@override
 	Widget build(BuildContext context) {
 
-		Size _deviceSize = MediaQuery.of(context).size;
-		double _width = _deviceSize.width;
-		double _root = _width / 1.616;
-		double _rootQuarter = _root / 4;
-		double _rootEighth = _root / 8;
-		double _rootThird = _root / 3;
-		double _rootHalf = _root / 2;
+		Geometry geometry = new Geometry(context);
+
+		DurationPicker _durationPicker = DurationPicker(
+			rootSize: geometry.root,
+			duration: _duration,
+			onChange: _onChangeDuration,
+		);
 
 		return Column(
 
 			mainAxisAlignment: MainAxisAlignment.spaceBetween,
 			children: <Widget>[
 
-				Container(
-					constraints: BoxConstraints.expand(height: _rootThird)
-				),
+				Container(constraints: BoxConstraints.expand(height: geometry.rootThird)),
 
 				SubPageHeader(text: 'Set Timer'),
 
-				Container(
-					constraints: BoxConstraints.expand(height: _rootQuarter)
-				),
+				Container(constraints: BoxConstraints.expand(height: geometry.rootQuarter)),
 
-				DurationPicker(
-					rootSize: _root,
-					duration: Duration(minutes: 20),
-					onChangeDuration: _onChangeDuration
-				),
+				_durationPicker,
 
-				Container(
-					margin: EdgeInsets.all(36),
-					constraints: BoxConstraints.expand(height: 48),
-					child: RaisedButton(
-						child: Text(
-							'start',
-								style: TextStyle(
-									fontWeight: FontWeight.w200, fontSize: 20
-								)
-							),
-						textTheme: ButtonTextTheme.primary,
-						textColor: Colors.orange[50],
-						color: Colors.blueGrey[900],
-						highlightColor: Colors.blueGrey[800],
-						splashColor: Colors.blueGrey[300],
-						elevation: 4,
-						disabledElevation: 0,
-						highlightElevation: 8,
-						onPressed:  () { print('pressed me'); },
-					)
+				ButtonGroup(
+					buttons: [
+						SmartButton(
+							text: 'start',
+							onPressed: _duration.inMinutes > 0 ? _onPressStart : null
+						)
+					]
 				)
 			]
 		);
 	}
 }
 
+
 class DurationPicker extends StatefulWidget {
 
 	const DurationPicker({
 		Key key,
+		Function onChange,
 		@required Duration duration,
-		@required double rootSize,
-		@required Function onChangeDuration
-	}) : _root = rootSize, _duration = duration, _onChangeDuration = onChangeDuration, super(key: key);
+		@required double rootSize
+	}) : _root = rootSize, _duration = duration, _onChange = onChange, super(key: key);
 
 	final double _root;
 	final Duration _duration;
-	final Function _onChangeDuration;
+	final Function _onChange;
 
 	static double clipFactor = 0.82;
 	static double itemExtent = 56.0;
@@ -132,6 +119,8 @@ class DurationPickerState extends State<DurationPicker> {
 		return _widgets.toList();
 	}
 
+	Duration get duration => Duration(hours: _hours, minutes: _minutes);
+
 	int _hours;
 	int _minutes;
 
@@ -150,18 +139,22 @@ class DurationPickerState extends State<DurationPicker> {
 
 	void _onChangeHours(int) {
 
-		print(int);
+		_hours = int;
+		widget._onChange(duration);
 	}
 
 	void _onChangeMinutes(int) {
 		
-		print(int);
+		_minutes = int;
+		widget._onChange(duration);
+	}
+
+	void _onChange() {
+
 	}
 
 	@override
 	Widget build(BuildContext context) {
-
-
 
 		return Row(
 			mainAxisAlignment: MainAxisAlignment.center,

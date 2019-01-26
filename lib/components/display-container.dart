@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../components/background-video.dart';
 import '../components/nav-tab-icon.dart';
 import '../types/screen-view.dart';
+import '../views/timer-countdown.dart';
 
 class DisplayContainer extends StatefulWidget {
 
@@ -66,6 +67,52 @@ class _DisplayContainerState extends State<DisplayContainer> with SingleTickerPr
 		_controller.dispose();
 	}
 
+
+	Route<dynamic> _onGenerateRoute(RouteSettings settings) {
+
+		switch (settings.name) {
+
+			case '/timer':
+			return MaterialPageRoute( builder: (BuildContext _) => TimerCountdownScreen() );
+
+			case '/':
+			default:
+			return MaterialPageRoute(
+
+				builder: (BuildContext _) => Stack(
+
+					children: <Widget> [
+
+						Container(
+							padding: EdgeInsets.only(bottom: 48),
+							constraints: BoxConstraints.expand(),
+							child: TabBarView(
+								controller: _controller,
+								children: widget.screens.map<Widget>((ScreenView screen) { return screen.widget; }).toList(),
+							),
+						),
+
+						Column(	
+							mainAxisAlignment: MainAxisAlignment.end,
+							crossAxisAlignment: CrossAxisAlignment.stretch,
+							children: [
+								
+								TabBar(
+									labelPadding: EdgeInsets.zero,
+									controller: _controller,
+									indicatorWeight: 4,
+									tabs: _tabs,
+									indicatorPadding: EdgeInsets.all(1)
+								)
+							]
+						)
+					]
+				)
+			);
+
+		}
+	}
+
 	@override
 	Widget build(BuildContext context) {
 
@@ -77,31 +124,8 @@ class _DisplayContainerState extends State<DisplayContainer> with SingleTickerPr
 				children: <Widget>[
 					
 					BackgroundVideo(assetName: 'assets/videos/zenstones.mp4'),
-					
-					Container(
-						padding: EdgeInsets.only(bottom: 48),
-						constraints: BoxConstraints.expand(),
-						child: TabBarView(
-							controller: _controller,
-							children: widget.screens.map<Widget>((ScreenView screen) { return screen.widget; }).toList(),
-						),
-					),
-
-					Column(	
-						mainAxisAlignment: MainAxisAlignment.end,
-						crossAxisAlignment: CrossAxisAlignment.stretch,
-						children: [
-							
-							TabBar(
-								labelPadding: EdgeInsets.zero,
-								controller: _controller,
-								indicatorWeight: 4,
-								tabs: _tabs,
-								indicatorPadding: EdgeInsets.all(1)
-							)
-						]
-					)
-				]	
+					Navigator(onGenerateRoute: _onGenerateRoute)
+				]
 			)
 		);
     }
