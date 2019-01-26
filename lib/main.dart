@@ -13,7 +13,7 @@ import './views/meditation-guided.dart';
 import './views/meditation-timed.dart';
 
 class Prezence extends StatelessWidget {
-
+	
 	static String title = "Prezence";
 
     @override

@@ -10,16 +10,15 @@ class AnimatedSubtitleWidget extends AnimatedWidget {
 	
 	final String _text;
 
+	final Shadow _shadow = Shadow(
+		offset: Offset(1.0, 1.0),
+		blurRadius: 2.0,
+		color: Color.fromARGB(255, 0, 12, 24),
+	);
+
 	Widget build(BuildContext context) {
 
 		final Animation<Color> _animation = listenable;
-
-
-		final Shadow _shadow = Shadow(
-			offset: Offset(1.0, 1.0),
-			blurRadius: 2.0,
-			color: Color.fromARGB(255, 0, 12, 24),
-		);
 
 		final TextStyle _style = Theme.of(context).textTheme.display1
 			.copyWith( fontWeight: FontWeight.w200, shadows: [ _shadow ]);
@@ -53,7 +52,6 @@ class SubPageHeader extends StatefulWidget {
 class SubPageHeaderState extends State<SubPageHeader> with SingleTickerProviderStateMixin {
 
 	AnimationController _animationController;
-
 	Animation _colorTween;
 
 	@override
