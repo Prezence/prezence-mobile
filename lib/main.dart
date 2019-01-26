@@ -28,16 +28,17 @@ class Prezence extends StatelessWidget {
 			),
 
 			ScreenView(
-				name: 'Guided Meditation', 
-				widget: MeditationGuidedScreen(),
+				name: 'Timed Meditation', 
+				widget: MeditationTimedScreen(),
 				icon: Image.asset('assets/images/icon-meditation-bowl.png')
 			),
 
 			ScreenView(
-				name: 'Timed Meditation', 
-				widget: MeditationTimedScreen(),
+				name: 'Guided Meditation', 
+				widget: MeditationGuidedScreen(),
 				icon: Image.asset('assets/images/icon-headphones.png')
-			)
+			),
+		
 		];
 
         return MaterialApp(

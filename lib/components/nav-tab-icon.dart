@@ -10,7 +10,6 @@ class NavTabIcon extends StatefulWidget {
 		@required Image icon,
 		@required int index,
 		@required Animation animation
-
 	}) : _icon = icon, _index = index, _animation = animation, super(key: key);
 
 	final Image _icon;
