@@ -1,7 +1,6 @@
 // Prezence - Copyright 2019 The Innovation Group
 // @author Kenneth Reilly <kenneth@innovationgroup.tech>
 
-import 'dart:core';
 import 'package:flutter/material.dart';
 
 class MeditationGuidedScreen extends StatelessWidget {

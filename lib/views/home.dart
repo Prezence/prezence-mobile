@@ -1,9 +1,8 @@
 // Prezence - Copyright 2019 The Innovation Group
 // @author Kenneth Reilly <kenneth@innovationgroup.tech>
 
-import 'dart:core';
 import 'package:flutter/material.dart';
-import '../components/title-header.dart';
+import '../components/widgets/title-header.dart';
 
 class HomeScreen extends StatelessWidget {
 

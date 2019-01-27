@@ -7,10 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import './types/screen-view.dart';
-import './components/display-container.dart';
-import './views/home.dart';
+import './services/device-info.dart';
+import './components/layout/nav-container.dart';
 import './views/meditation-guided.dart';
 import './views/meditation-timed.dart';
+import './views/home.dart';
 
 class Prezence extends StatelessWidget {
 	
@@ -52,5 +53,6 @@ class Prezence extends StatelessWidget {
 Future<void> main() async {
 
 	await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+	await DeviceInfo.init();
 	runApp(Prezence());
 }

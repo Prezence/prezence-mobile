@@ -1,6 +1,7 @@
 // Prezence - Copyright 2019 The Innovation Group
 // @author Kenneth Reilly <kenneth@innovationgroup.tech>
 
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 class NavTabIcon extends StatefulWidget {
@@ -54,7 +55,9 @@ class NavTabIconState extends State<NavTabIcon> {
 						)
 					),
 					child: Padding(
-						padding: EdgeInsets.only(bottom: 4, top: 8),
+						padding: Platform.isAndroid 
+							? EdgeInsets.only(bottom: 4, top: 8)
+							: EdgeInsets.only(bottom: 16),
 						child: Opacity(
 							opacity: opacity,
 							child: widget._icon

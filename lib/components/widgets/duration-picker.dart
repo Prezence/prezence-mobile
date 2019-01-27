@@ -2,7 +2,7 @@
 // @author Kenneth Reilly <kenneth@innovationgroup.tech>
 
 import 'package:flutter/material.dart';
-import '../types/util.dart';
+import '../../types/util.dart';
 
 class DurationPicker extends StatefulWidget {
 
