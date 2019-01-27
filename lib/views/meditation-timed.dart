@@ -1,11 +1,10 @@
 // Prezence - Copyright 2019 The Innovation Group
 // @author Kenneth Reilly <kenneth@innovationgroup.tech>
 
-import 'dart:core';
 import 'package:flutter/material.dart';
-import '../components/subpage-header.dart';
-import '../components/smart-button.dart';
-import '../components/duration-picker.dart';
+import '../components/widgets/subpage-header.dart';
+import '../components/widgets/smart-button.dart';
+import '../components/widgets/duration-picker.dart';
 import '../services/timer-bus.dart';
 import '../types/geometry.dart';
 

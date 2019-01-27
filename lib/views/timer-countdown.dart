@@ -1,10 +1,9 @@
 // Prezence - Copyright 2019 The Innovation Group
 // @author Kenneth Reilly <kenneth@innovationgroup.tech>
 
-import 'dart:core';
 import 'package:flutter/material.dart';
-import '../components/smart-button.dart';
-import '../components/countdown-gauge.dart';
+import '../components/widgets/smart-button.dart';
+import '../components/widgets/countdown-gauge.dart';
 import '../services/timer-bus.dart';
 import '../types/geometry.dart';
 
@@ -16,14 +15,16 @@ class TimerCountdownScreen extends StatefulWidget {
 	TimerCountdownScreenState createState() => new TimerCountdownScreenState();
 }
 
-class TimerCountdownScreenState extends State<TimerCountdownScreen> {
+class TimerCountdownScreenState extends State<TimerCountdownScreen> with SingleTickerProviderStateMixin {
 
 	@override
 	void initState() {
 
 		super.initState();
-		TimerBus.registerElapsedListener((TimerElapsedEvent event) {  setState((){ }); });
-		TimerBus.registerCompletedListener((TimerCompletedEvent event) { print('completed'); });
+
+		TimerBus.registerElapsedListener(_onTimerElapsed);
+		TimerBus.registerCompletedListener(_onTimerComplete);
+
 		TimerBus.start();
 	}
 
@@ -31,6 +32,20 @@ class TimerCountdownScreenState extends State<TimerCountdownScreen> {
 	void dispose() {
 
 		super.dispose();
+		// _elapsedSubscription.cancel();
+		// _completedSubscription.cancel();
+	}
+
+	void _onTimerElapsed(TimerElapsedEvent event) {
+
+		// print('tick');
+		if (mounted) { return setState(() { }); }
+	}
+
+	void _onTimerComplete(TimerCompletedEvent event) {
+
+		if (mounted) { return setState(() { }); }
+		print('completed');
 	}
 
 	@override

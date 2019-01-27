@@ -1,7 +1,6 @@
 // Prezence - Copyright 2019 The Innovation Group
 // @author Kenneth Reilly <kenneth@innovationgroup.tech>
 
-import 'dart:core';
 import 'package:flutter/material.dart';
 
 class ButtonGroup extends StatelessWidget {
@@ -22,8 +21,8 @@ class ButtonGroup extends StatelessWidget {
 
 				children: List.generate(_buttons.length, (index) {
 
-					EdgeInsets _padding = (index != _buttons.length) 
-						? EdgeInsets.only(bottom: 16) 
+					EdgeInsets _padding = (index != _buttons.length)
+						? EdgeInsets.only(bottom: 16)
 						: EdgeInsets.zero;
 
 					return new Padding(padding: _padding, child: _buttons[index]);
@@ -67,8 +66,7 @@ class SmartButton extends StatelessWidget {
 				elevation: 3,
 				disabledElevation: 1,
 				highlightElevation: 6,
-				onPressed: _onPressed,
-				
+				onPressed: _onPressed
 			)
 		);
 	}

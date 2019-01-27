@@ -1,12 +1,12 @@
 // Prezence - Copyright 2019 The Innovation Group
 // @author Kenneth Reilly <kenneth@innovationgroup.tech>
 
+import 'dart:io';
 import 'package:flutter/material.dart';
-
-import '../components/background-video.dart';
-import '../components/nav-tab-icon.dart';
-import '../types/screen-view.dart';
-import '../views/timer-countdown.dart';
+import './background-video.dart';
+import './nav-tab-icon.dart';
+import '../../types/screen-view.dart';
+import '../../views/timer-countdown.dart';
 
 class DisplayContainer extends StatefulWidget {
 
@@ -36,7 +36,7 @@ class _DisplayContainerState extends State<DisplayContainer> with SingleTickerPr
 
 			Tab _tab = Tab(
 				icon: new NavTabIcon(
-					index: _index, 
+					index: _index,
 					icon: screen.icon, 
 					animation: _animation
 				),
@@ -93,19 +93,27 @@ class _DisplayContainerState extends State<DisplayContainer> with SingleTickerPr
 							crossAxisAlignment: CrossAxisAlignment.stretch,
 							children: [
 								
-								TabBar(
+								( Platform.isAndroid )
+								
+								? TabBar(
+									indicatorPadding: EdgeInsets.all(1),
 									labelPadding: EdgeInsets.zero,
 									controller: _controller,
 									indicatorWeight: 4,
-									tabs: _tabs,
-									indicatorPadding: EdgeInsets.all(1)
+									tabs: _tabs
+								)
+
+								: TabBar(
+									indicator: BoxDecoration(),
+									labelPadding: EdgeInsets.zero,
+									controller: _controller,
+									tabs: _tabs
 								)
 							]
 						)
 					]
 				)
 			);
-
 		}
 	}
 

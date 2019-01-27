@@ -3,7 +3,6 @@
 
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-
 import '../types/meditation-stats.dart';
 
 class Storage {

@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import '../../services/device-info.dart';
 
 class BackgroundVideo extends StatefulWidget {
 
@@ -20,7 +21,13 @@ class BackgroundVideoState extends State<BackgroundVideo> {
 	VideoPlayerController _controller;
 
 	bool _isPlaying = false;
-		
+
+	double get _aspectRatio {
+
+		try { return _controller.value.aspectRatio; }
+		catch(ex) { return 16/9; }
+	}
+
 	void onVideoEvent() {
 
 		final bool isPlaying = _controller.value.isPlaying;
@@ -47,22 +54,32 @@ class BackgroundVideoState extends State<BackgroundVideo> {
 	@override
 	Widget build(BuildContext context) {
 
-		final OverflowBox _overflowBox = OverflowBox(
-
-			maxWidth: double.infinity,
-			alignment: Alignment.center,
-			child: AspectRatio(
-				aspectRatio: _controller.value.aspectRatio,
-				child: VideoPlayer(_controller),
-			)
-		);
-
 		return  Stack(
 
 			alignment: AlignmentDirectional.topStart,
 			children: <Widget>[
 				Container( color: Colors.black ),
-				_overflowBox
+				( 
+					DeviceInfo.canRenderVideo 
+		
+					? OverflowBox(
+						maxWidth: double.infinity,
+						alignment: Alignment.center,
+						child: AspectRatio(
+							aspectRatio: _aspectRatio,
+							child: VideoPlayer(_controller),
+						)
+					)
+
+					: Container(
+						decoration: BoxDecoration(
+							image: DecorationImage(
+								fit: BoxFit.cover,
+								image: AssetImage('assets/images/video-placeholder.jpg')
+							)
+						)
+					)
+				)
 			]
 		);
 	}

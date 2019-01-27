@@ -3,7 +3,7 @@
 
 import 'dart:math';
 import 'package:flutter/material.dart';
-import '../types/geometry.dart';
+import '../../types/geometry.dart';
 
 class CountdownGauge extends StatefulWidget {
 
@@ -20,7 +20,7 @@ class CountdownGauge extends StatefulWidget {
 	CountdownGaugeState createState() { return new CountdownGaugeState(); }
 }
 
-class CountdownGaugeState extends State<CountdownGauge> with SingleTickerProviderStateMixin {
+class CountdownGaugeState extends State<CountdownGauge> with TickerProviderStateMixin {
 
 	AnimationController _animationController;
 	Animation _animation;
@@ -30,14 +30,13 @@ class CountdownGaugeState extends State<CountdownGauge> with SingleTickerProvide
 	void initState() {
 
 		super.initState();
-		// setState(() { _opacity = 1.0; });
-	
 		_animationController = AnimationController(vsync: this, duration: Duration(milliseconds:600));
 		_animationController.forward();
 	}
 
 	@override
 	void dispose() {
+
 		super.dispose();
 		_animationController = AnimationController(vsync: this, duration: Duration(milliseconds:100));
 		_animationController.reverse();
@@ -46,13 +45,6 @@ class CountdownGaugeState extends State<CountdownGauge> with SingleTickerProvide
 	@override
 	Widget build(BuildContext context) {
 
-		// int totalMinutes = widget._duration.inMinutes;
-		int totalSeconds = widget._duration.inSeconds;
-		int _hours =  widget._duration.inHours;
-		int _minutes = ((totalSeconds / 60) - _hours * 60).floor();
-		int _seconds =  (totalSeconds  %  60);
-
-		Geometry _geometry = new Geometry(context);
 		double _percentComplete = widget._duration.inSeconds / widget._initialDuration.inSeconds;
 		
 		_animation = Tween(begin: 0.0, end: 1.0)
@@ -60,12 +52,9 @@ class CountdownGaugeState extends State<CountdownGauge> with SingleTickerProvide
 				..addListener(() { setState(() { }); });
 
 		return new AnimatedGaugeWidget(
-			percentComplete: _percentComplete, 
-			geometry: _geometry, 
-			hours: _hours, 
-			minutes: _minutes, 
-			seconds: _seconds,
+			duration: widget._duration,
 			animation: _animation,
+			percentComplete: _percentComplete, 
 		);
 	}
 }
@@ -74,31 +63,30 @@ class AnimatedGaugeWidget extends AnimatedWidget {
 
 	const AnimatedGaugeWidget({
 		Key key,
-		@required double percentComplete,
-		@required Geometry geometry,
-		@required int hours,
-		@required int minutes,
-		@required int seconds,
-		Animation<double> animation
-	}) : _percentComplete = percentComplete, _geometry = geometry, _hours = hours, _minutes = minutes, _seconds = seconds, super(key: key, listenable: animation);
+		@required Duration duration,
+		Animation<double> animation,
+		@required double percentComplete
+	}) : _percentComplete = percentComplete, _duration = duration, super(key: key, listenable: animation);
 
   	final double _percentComplete;
-	final Geometry _geometry;
-	final int _hours;
-	final int _minutes;
-	final int _seconds;
+	final Duration _duration;
 
 	@override
 	Widget build(BuildContext context) {
 
 		final Animation<double> _animation = listenable;
 		final double _opacity = _animation.value;
+		final Geometry _geometry = new Geometry(context);
+		
+		int totalSeconds = _duration.inSeconds;
+		int _hours =  _duration.inHours;
+		int _minutes = ((totalSeconds / 60) - _hours * 60).floor();
+		int _seconds =  (totalSeconds  %  60);
 
 		TextStyle _style = TextStyle(
 			color: Colors.orange[50].withOpacity(_opacity), 
 			fontSize: 32, 
 			fontWeight: FontWeight.w200,
-			
 		);
 		
 		return CustomPaint(
