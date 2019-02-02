@@ -8,15 +8,15 @@ import '../components/widgets/duration-picker.dart';
 import '../services/timer-bus.dart';
 import '../types/geometry.dart';
 
-class MeditationTimedScreen extends StatefulWidget {
+class HomeTabSetTimer extends StatefulWidget {
 
-	const MeditationTimedScreen({ Key key }) : super(key: key);
+	const HomeTabSetTimer({ Key key }) : super(key: key);
 
 	@override
-	MeditationTimedScreenState createState() => new MeditationTimedScreenState();
+	HomeTabSetTimerState createState() => new HomeTabSetTimerState();
 }
 
-class MeditationTimedScreenState extends State<MeditationTimedScreen> {
+class HomeTabSetTimerState extends State<HomeTabSetTimer> {
 
 	Duration _duration = Duration(minutes: 20);
 

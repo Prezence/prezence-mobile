@@ -1,10 +1,10 @@
 // Prezence - Copyright 2019 The Innovation Group
 // @author Kenneth Reilly <kenneth@innovationgroup.tech>
 
-// import '../types/meditation-stats.dart';
+abstract class DataModel {
 
-class MetricsService {
-
-	// const MetricsService({  });
-
+	int id;
+	DataModel();
+	Map<String, dynamic> toMap();
+	DataModel.fromMap();
 }

@@ -3,10 +3,11 @@
 
 import 'package:flutter/material.dart';
 import '../components/widgets/title-header.dart';
+import '../components/widgets/home-stats.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeTabStats extends StatelessWidget {
 
-	const HomeScreen({
+	const HomeTabStats({
 		Key key,
 	}) : super(key: key);
 
@@ -29,7 +30,7 @@ class HomeScreen extends StatelessWidget {
 				
 				ConstrainedBox(
 					constraints: BoxConstraints.expand(height: _navItemSize.height),
-					child: Container()
+					child: HomeStats()
 				)				
 			],
 		);

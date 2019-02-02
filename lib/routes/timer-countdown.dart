@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import '../components/widgets/smart-button.dart';
 import '../components/widgets/countdown-gauge.dart';
 import '../services/timer-bus.dart';
+import '../services/media-bus.dart';
+import '../services/app-metrics.dart';
 import '../types/geometry.dart';
 
 class TimerCountdownScreen extends StatefulWidget {
@@ -26,26 +28,32 @@ class TimerCountdownScreenState extends State<TimerCountdownScreen> with SingleT
 		TimerBus.registerCompletedListener(_onTimerComplete);
 
 		TimerBus.start();
+
+		try { MediaBus.playSoundEffect('bell-strike-1.mp3'); }
+		catch(ex) { print(ex); }
 	}
 
 	@override
 	void dispose() {
 
 		super.dispose();
-		// _elapsedSubscription.cancel();
-		// _completedSubscription.cancel();
 	}
 
 	void _onTimerElapsed(TimerElapsedEvent event) {
 
-		// print('tick');
 		if (mounted) { return setState(() { }); }
 	}
 
 	void _onTimerComplete(TimerCompletedEvent event) {
 
-		if (mounted) { return setState(() { }); }
-		print('completed');
+		if (mounted) {
+
+			AppMetrics.logSession(TimerBus.initialDuration);
+			
+			MediaBus.playSoundEffect('bell-strike-2.mp3');
+			
+			Navigator.popUntil(context, (Route route) => route.isFirst);
+		}
 	}
 
 	@override
