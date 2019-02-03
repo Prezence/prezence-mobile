@@ -74,10 +74,19 @@ class HomeStatsState extends State<HomeStats> with SingleTickerProviderStateMixi
 		refresh();
 	}
 
+	@override
+	void dispose() {
+
+		_animationController.dispose();
+		super.dispose();
+	}
+
 	void refresh() async {
 
 		MeditationStats _currentStats = await AppMetrics.getstats();
-		setState(() { _stats = _currentStats; });
+		setState(() { 
+			_stats = _currentStats; }
+		);
 	}
 
 	@override

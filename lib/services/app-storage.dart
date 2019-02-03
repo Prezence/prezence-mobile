@@ -43,6 +43,8 @@ class AppStorage {
 		String _query = 'select event_timestamp from history order by id desc limit 1';
 		List<Map<String, dynamic>> _result = await DataLayer.rawQuery(_query);
 		
+		if (_result.length == 0) { return null; }
+
 		String timestamp = _result[0]['event_timestamp'];
 		UTCTimestamp dateTime = UTCTimestamp.parse(timestamp);
 		return dateTime;

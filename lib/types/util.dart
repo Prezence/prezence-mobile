@@ -9,4 +9,9 @@ class Util {
 			yield i;
 		}
 	}
+
+	static double scaleDouble(double value, double percent) {
+
+		return 1.0 - ( 1.0 - (value * (1.0 - percent)) - percent );
+	}
 }

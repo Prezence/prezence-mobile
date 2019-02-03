@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import '../../services/device-info.dart';
+import '../../services/animation-bus.dart';
 
 class BackgroundVideo extends StatefulWidget {
 
@@ -19,7 +20,6 @@ class BackgroundVideo extends StatefulWidget {
 class BackgroundVideoState extends State<BackgroundVideo> {
 
 	VideoPlayerController _controller;
-
 	bool _isPlaying = false;
 
 	double get _aspectRatio {
@@ -52,35 +52,52 @@ class BackgroundVideoState extends State<BackgroundVideo> {
 	}
 
 	@override
+	void dispose() {
+
+		_controller.dispose();
+		super.dispose();
+	}
+
+	@override
 	Widget build(BuildContext context) {
 
-		return  Stack(
+		Animation animation = AnimationBus.tabAnimation;
 
-			alignment: AlignmentDirectional.topStart,
-			children: <Widget>[
-				Container( color: Colors.black ),
-				( 
-					DeviceInfo.canRenderVideo 
-		
-					? OverflowBox(
-						maxWidth: double.infinity,
-						alignment: Alignment.center,
-						child: AspectRatio(
-							aspectRatio: _aspectRatio,
-							child: VideoPlayer(_controller),
-						)
-					)
+		return AnimatedBuilder(
+			animation: animation,
+			builder: (BuildContext context, Widget child) {
 
-					: Container(
-						decoration: BoxDecoration(
-							image: DecorationImage(
-								fit: BoxFit.cover,
-								image: AssetImage('assets/images/video-placeholder.jpg')
+				double offset = animation.value * 0.1; 
+
+				return  Stack(
+
+					alignment: AlignmentDirectional.topStart,
+					children: <Widget>[
+						Container( color: Colors.black ),
+						( 
+							DeviceInfo.canRenderVideo 
+				
+							? OverflowBox(
+								maxWidth: double.infinity,
+								alignment: Alignment(offset, 0),
+								child: AspectRatio(
+									aspectRatio: _aspectRatio,
+									child: VideoPlayer(_controller),
+								)
+							)
+
+							: Container(
+								decoration: BoxDecoration(
+									image: DecorationImage(
+										fit: BoxFit.cover,
+										image: AssetImage('assets/images/video-placeholder.jpg')
+									)
+								)
 							)
 						)
-					)
-				)
-			]
+					]
+				);
+			}
 		);
 	}
 }

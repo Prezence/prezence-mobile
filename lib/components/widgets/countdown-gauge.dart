@@ -38,8 +38,9 @@ class CountdownGaugeState extends State<CountdownGauge> with TickerProviderState
 	void dispose() {
 
 		super.dispose();
-		_animationController = AnimationController(vsync: this, duration: Duration(milliseconds:100));
-		_animationController.reverse();
+		_animationController = AnimationController(vsync: this, duration: Duration(milliseconds:200));
+		_animationController.reverse()
+			.then((_) { _animationController.dispose(); });
 	}
 
 	@override

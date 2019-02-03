@@ -68,6 +68,13 @@ class TitleHeaderState extends State<TitleHeader> with SingleTickerProviderState
 	}
 
 	@override
+	void dispose() {
+		
+		_animationController.dispose();
+		super.dispose();
+	}
+
+	@override
 	Widget build(BuildContext context) {
 
 		_colorTween = ColorTween(begin: Colors.cyan, end: Colors.orange)

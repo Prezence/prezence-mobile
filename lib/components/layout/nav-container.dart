@@ -4,7 +4,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import '../../types/nav-route.dart';
+import './nav-route-view.dart';
 import './nav-tab-icon.dart';
+import '../../services/animation-bus.dart';
 
 class NavContainer extends StatefulWidget {
 
@@ -19,9 +21,6 @@ class NavContainer extends StatefulWidget {
 class _NavContainerState extends State<NavContainer> with SingleTickerProviderStateMixin {
 
 	TabController _controller;
-
-	get selected { return _selected; }
-	int _selected = 0;
 
 	get animation { return _animation; }
 	Animation _animation;
@@ -46,12 +45,32 @@ class _NavContainerState extends State<NavContainer> with SingleTickerProviderSt
 		return _map.toList();
 	}
 
+	List<NavRouteView> get _routes {
+
+		int _index = 0;
+		Iterable<NavRouteView> _map = widget.children.map<NavRouteView>((NavRoute screen) { 
+
+			NavRouteView _view = NavRouteView(
+				index: _index, 
+				child: screen.widget, 
+				animation: _animation
+			);
+
+			_index++;
+			return _view;
+		});
+		
+		return _map.toList();
+	}
+
 	@override
 	void initState() {
 
 		super.initState();
+
 		_controller = new TabController(vsync: this, length: widget.children.length);
 		_animation = _controller.animation;
+		AnimationBus.registerTabController(_controller);
 	}
 
 	@override
@@ -61,12 +80,10 @@ class _NavContainerState extends State<NavContainer> with SingleTickerProviderSt
 		_controller.dispose();
 	}
 
-
 	@override
 	Widget build(BuildContext context) {
 
 		return Stack(
-
 			children: <Widget> [
 
 				Container(
@@ -74,7 +91,7 @@ class _NavContainerState extends State<NavContainer> with SingleTickerProviderSt
 					constraints: BoxConstraints.expand(),
 					child: TabBarView(
 						controller: _controller,
-						children: widget.children.map<Widget>((NavRoute screen) { return screen.widget; }).toList(),
+						children: _routes
 					),
 				),
 
@@ -103,5 +120,5 @@ class _NavContainerState extends State<NavContainer> with SingleTickerProviderSt
 				)
 			]
 		);
-    }
+	}
 }
