@@ -48,7 +48,6 @@ class SmartButton extends StatelessWidget {
 
 		return Container(
 
-			// margin: EdgeInsets.all(36),
 			constraints: BoxConstraints.expand(height: 48),
 			child: RaisedButton(
 				child: Text(

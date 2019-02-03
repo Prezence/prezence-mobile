@@ -3,9 +3,9 @@
 
 import 'package:flutter/material.dart';
 
-class MeditationGuidedScreen extends StatelessWidget {
+class HomeTabLibrary extends StatelessWidget {
 
-	const MeditationGuidedScreen({
+	const HomeTabLibrary({
 		Key key,
 	}) : super(key: key);
 

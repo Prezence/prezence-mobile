@@ -70,6 +70,13 @@ class DurationPickerState extends State<DurationPicker> {
 		_scrollController2 = new FixedExtentScrollController(initialItem: _minutes);
 	}
 
+	@override dispose() {
+
+		_scrollController1.dispose();
+		_scrollController2.dispose();
+		super.dispose();
+	}
+
 	void _onChangeHours(int) {
 
 		_hours = int;

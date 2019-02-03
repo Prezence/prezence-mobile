@@ -6,12 +6,12 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import './types/screen-view.dart';
-import './services/device-info.dart';
-import './components/layout/nav-container.dart';
-import './views/meditation-guided.dart';
-import './views/meditation-timed.dart';
-import './views/home.dart';
+import './services/service-bus.dart';
+import './types/nav-route.dart';
+import './components/layout/app-container.dart';
+import './routes/home-tab-library.dart';
+import './routes/home-tab-set-timer.dart';
+import './routes/home-tab-stats.dart';
 
 class Prezence extends StatelessWidget {
 	
@@ -20,23 +20,23 @@ class Prezence extends StatelessWidget {
     @override
     Widget build(BuildContext context) {
 
-		List<ScreenView> _screens = [
+		List<NavRoute> _screens = [
 
-			ScreenView(
+			NavRoute(
 				name: 'Home',
-				widget: HomeScreen(),
+				widget: HomeTabStats(),
 				icon: Image.asset('assets/images/icon-home.png')
 			),
 
-			ScreenView(
+			NavRoute(
 				name: 'Timed Meditation', 
-				widget: MeditationTimedScreen(),
+				widget: HomeTabSetTimer(),
 				icon: Image.asset('assets/images/icon-meditation-bowl.png')
 			),
 
-			ScreenView(
+			NavRoute(
 				name: 'Guided Meditation', 
-				widget: MeditationGuidedScreen(),
+				widget: HomeTabLibrary(),
 				icon: Image.asset('assets/images/icon-headphones.png')
 			),
 		
@@ -45,7 +45,7 @@ class Prezence extends StatelessWidget {
         return MaterialApp(
             title: Prezence.title,
             theme: ThemeData(primarySwatch: Colors.brown),
-          	home: DisplayContainer(title: Prezence.title, screens: _screens),
+          	home: AppContainer(title: Prezence.title, screens: _screens),
       	);
     }
 }
@@ -53,6 +53,6 @@ class Prezence extends StatelessWidget {
 Future<void> main() async {
 
 	await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-	await DeviceInfo.init();
+	await ServiceBus.init();
 	runApp(Prezence());
 }

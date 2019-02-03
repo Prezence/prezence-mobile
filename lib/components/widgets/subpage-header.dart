@@ -64,6 +64,13 @@ class SubPageHeaderState extends State<SubPageHeader> with SingleTickerProviderS
 	}
 
 	@override
+	void dispose() {
+
+		_animationController.dispose();
+		super.dispose();
+	}
+
+	@override
 	Widget build(BuildContext context) {
 
 		_colorTween = ColorTween(begin: Colors.brown, end: Colors.cyan[50])

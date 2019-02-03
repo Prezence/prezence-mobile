@@ -8,7 +8,7 @@ class TimerCompletedEvent {}
 class TimerCancelledEvent extends TimerCompletedEvent {}
 class TimerElapsedEvent { TimerElapsedEvent(this.remaining); Duration remaining; }
 
-class TimerBus { 
+abstract class TimerBus { 
 
 	static EventBus _bus = new EventBus();
 	static Timer _timer;
