@@ -45,6 +45,8 @@ class BackgroundVideoState extends State<BackgroundVideo> {
 			..addListener(this.onVideoEvent)
 			..initialize().then((_) {
 			
+				if (!DeviceInfo.canRenderVideo) { return; }
+
 				setState(() { });
 				_controller.setLooping(true);
 				_controller.play();
@@ -87,6 +89,7 @@ class BackgroundVideoState extends State<BackgroundVideo> {
 							)
 
 							: Container(
+								alignment: Alignment(offset, 0),
 								decoration: BoxDecoration(
 									image: DecorationImage(
 										fit: BoxFit.cover,

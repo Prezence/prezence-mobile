@@ -6,7 +6,7 @@ import 'dart:async';
 import '../types/meditation-stats.dart';
 import '../types/utc-timestamp.dart';
 import '../models/history-item.dart';
-import '../services/data-layer.dart';
+import '../services/db.dart';
 
 class AppStorage {
 
@@ -24,29 +24,45 @@ class AppStorage {
 
 	static Future<int> logHistoryItem(HistoryItem item) async {
 
-		return DataLayer.insert('history', item);
+		return DB.insert('history', item);
 	}
 
 	static Future<MeditationTotals> getTotals() async {
 
 		String _query = 'select sum(minutes) as total_minutes, count(id) as total_sessions from history';
-		List<Map<String, dynamic>> _result = await DataLayer.rawQuery(_query);
+		List<Map<String, dynamic>> _result = await DB.rawQuery(_query);
 		
-		int totalMinutes = _result[0]['total_minutes'];
-		int totalSessions = _result[0]['total_sessions'];
-
-		return MeditationTotals.fromMap({ 'minutes': totalMinutes, 'sessions': totalSessions });
+		bool hasResults = _result.length > 0;
+		
+		return MeditationTotals.fromMap({ 
+			'total_minutes': (hasResults) ? _result[0]['total_minutes'] : 0, 
+			'total_sessions': (hasResults) ? _result[0]['total_sessions'] : 0
+		});
 	}
 	
 	static Future<UTCTimestamp> getLastSession() async {
 
 		String _query = 'select event_timestamp from history order by id desc limit 1';
-		List<Map<String, dynamic>> _result = await DataLayer.rawQuery(_query);
+		List<Map<String, dynamic>> _result = await DB.rawQuery(_query);
 		
 		if (_result.length == 0) { return null; }
 
 		String timestamp = _result[0]['event_timestamp'];
 		UTCTimestamp dateTime = UTCTimestamp.parse(timestamp);
 		return dateTime;
+	}
+
+	static Future<void> test() async {
+
+		HistoryItem item = new HistoryItem(Duration(minutes: 5));
+		AppStorage.logHistoryItem(item);
+
+		String _query = "select * from history";
+		List<Map<String, dynamic>> _result = await DB.rawQuery(_query);
+		
+	
+		for (Map<String, dynamic> item in _result) {
+			print(item);
+		}
 	}
 }

@@ -16,7 +16,7 @@ class ButtonGroup extends StatelessWidget {
 	Widget build(BuildContext context) {
 
 		return Container(
-			margin: EdgeInsets.all(36),
+			margin: EdgeInsets.all(32),
 			child: Column(
 
 				children: List.generate(_buttons.length, (index) {
@@ -62,7 +62,7 @@ class SmartButton extends StatelessWidget {
 				highlightColor: Colors.yellow[700].withOpacity(0.36),
 				splashColor: Colors.yellow[50].withOpacity(0.48),
 				disabledColor: Colors.black26,
-				elevation: 3,
+				elevation: 5,
 				disabledElevation: 1,
 				highlightElevation: 6,
 				onPressed: _onPressed

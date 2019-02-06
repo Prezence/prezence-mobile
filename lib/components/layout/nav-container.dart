@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../types/nav-route.dart';
 import './nav-route-view.dart';
 import './nav-tab-icon.dart';
-import '../../services/animation-bus.dart';
+import '../../services/navigation-bus.dart';
 
 class NavContainer extends StatefulWidget {
 
@@ -70,7 +70,7 @@ class _NavContainerState extends State<NavContainer> with SingleTickerProviderSt
 
 		_controller = new TabController(vsync: this, length: widget.children.length);
 		_animation = _controller.animation;
-		AnimationBus.registerTabController(_controller);
+		NavigationBus.registerTabController(_controller);
 	}
 
 	@override

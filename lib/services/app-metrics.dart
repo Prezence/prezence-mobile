@@ -11,11 +11,20 @@ abstract class AppMetrics {
 
 	// const MetricsService({  });
 
-	static Future<dynamic> getstats() async {
+	static Future<dynamic> getStats() async {
 		
-		MeditationTotals totals = await AppStorage.getTotals();
-		UTCTimestamp lastSession = await AppStorage.getLastSession();
-		return MeditationStats(lastSession: lastSession, totals: totals);
+		try {
+			MeditationTotals totals = await AppStorage.getTotals();
+			UTCTimestamp lastSession = await AppStorage.getLastSession();
+			MeditationStats stats = MeditationStats(lastSession: lastSession, totals: totals);
+			return stats;
+
+		}
+		catch(ex) {
+			print(ex);
+		}
+
+		return MeditationStats.empty();
 	}
 
 	static Future<void> logSession(Duration duration) {

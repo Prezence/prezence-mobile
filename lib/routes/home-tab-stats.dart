@@ -3,7 +3,7 @@
 
 import 'package:flutter/material.dart';
 import '../components/widgets/title-header.dart';
-import '../components/widgets/home-stats.dart';
+import '../components/widgets/history-card.dart';
 
 class HomeTabStats extends StatelessWidget {
 
@@ -22,16 +22,23 @@ class HomeTabStats extends StatelessWidget {
 		Size _navItemSize = Size(_width + _padding, (_width + _padding) / 1.618);
 
 		return Column(
-
+			
 			mainAxisAlignment: MainAxisAlignment.spaceBetween,
 			children: <Widget>[
 
 				TitleHeader(),
 				
-				ConstrainedBox(
-					constraints: BoxConstraints.expand(height: _navItemSize.height),
-					child: HomeStats()
-				)				
+				Padding(
+					padding: EdgeInsets.only(
+						bottom: 24,
+						left: 8,
+						right: 8
+					),
+					child: ConstrainedBox(					
+						constraints: BoxConstraints.expand(height: _navItemSize.height),
+						child: HistoryCard()
+					)				
+				)
 			],
 		);
 	}

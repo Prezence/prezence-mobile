@@ -33,7 +33,7 @@ class NavRouteView extends AnimatedWidget {
 					: (delta > 1 && delta < 2) ? (2 - delta) : 0;
 
 				double _transform = Util.scaleDouble(scale, 0.8);
-				double _opacity = Util.scaleDouble(scale, 0.9);
+				// double _opacity = Util.scaleDouble(scale, 0.9);
 
 				return Transform.scale(
 					scale: _transform,

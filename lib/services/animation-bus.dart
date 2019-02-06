@@ -4,6 +4,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
+import './navigation-bus.dart';
+
+enum PageDirection { LEFT, RIGHT, IDLE }
 
 class AnimationEvent { }
 
@@ -13,22 +16,24 @@ class AnimationUpdateEvent extends AnimationEvent {
 }
 
 class AnimationTabScrollEvent extends AnimationUpdateEvent {
+
 	AnimationTabScrollEvent(double _value) : super(_value);
 }
 
 class AnimationCompleteEvent extends AnimationEvent {
 
-	AnimationCompleteEvent(this.remaining); Duration remaining;
-
+	AnimationCompleteEvent(this.remaining);
+	Duration remaining;
 }
 
 abstract class AnimationBus { 
 
 	static EventBus _bus = new EventBus();
 
-	static set (TabController x) { _tabController = x; }
-	static TabController get tabController => AnimationBus._tabController;
-	static TabController _tabController;
+	static TabController get _tabController => NavigationBus.tabController;
+	
+	// static bool _tabIndexChanging = false;
+	static PageDirection _direction = PageDirection.IDLE;
 
 	static Animation get tabAnimation {
 
@@ -38,8 +43,50 @@ abstract class AnimationBus {
 	}
 
 	static void onUpdateTabAnimation() {
+			
+		if (_tabController.indexIsChanging) {
+
+			_direction = (_tabController.index > _tabController.previousIndex)
+				? PageDirection.RIGHT
+				: PageDirection.LEFT;
+
+			// print(_direction);
+			// print(_tabController.offset);
+			
+			switch (_direction) {
+
+				case PageDirection.RIGHT:
+
+					if (_tabController.offset < -0.7) {
+						// nimationBus.warpToTab(_tabController.index);
+					}
+					return;
+
+				case PageDirection.LEFT:
+
+					if (_tabController.offset > 0.7) {
+						// AnimationBus.warpToTab(_tabController.index);
+					}
+
+					return;
+
+				case PageDirection.IDLE:
+
+					// _tabIndexChanging = false;
+					return;
+			}
+		}
+
+		// print ('offset: ' + _tabController.offset.toString());
 
 		_bus.fire(AnimationTabScrollEvent(tabAnimation.value));
+	}
+
+	static void warpToTab(int index) {
+
+		// _tabIndexChanging = false;
+		_direction = PageDirection.IDLE;
+		_tabController.animateTo(_tabController.index);
 	}
 
 	static StreamSubscription registerTabScrollListener(Function listener) {
@@ -47,10 +94,6 @@ abstract class AnimationBus {
 		return _bus.on<AnimationTabScrollEvent>().listen(listener);
 	}
 
-	static void registerTabController(TabController controller) {
 
-		_tabController = controller;
-		_tabController.animation.addListener(onUpdateTabAnimation);
-	}
 
 }
