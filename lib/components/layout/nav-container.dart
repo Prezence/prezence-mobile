@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../types/nav-route.dart';
 import './nav-route-view.dart';
 import './nav-tab-icon.dart';
-import '../../services/animation-bus.dart';
+import '../../services/navigation-bus.dart';
 
 class NavContainer extends StatefulWidget {
 
@@ -70,7 +70,7 @@ class _NavContainerState extends State<NavContainer> with SingleTickerProviderSt
 
 		_controller = new TabController(vsync: this, length: widget.children.length);
 		_animation = _controller.animation;
-		AnimationBus.registerTabController(_controller);
+		NavigationBus.registerTabController(_controller);
 	}
 
 	@override
@@ -87,11 +87,13 @@ class _NavContainerState extends State<NavContainer> with SingleTickerProviderSt
 			children: <Widget> [
 
 				Container(
-					padding: EdgeInsets.only(bottom: 48),
+					padding: Platform.isAndroid
+						? EdgeInsets.only(bottom: 48)
+						: EdgeInsets.only(bottom: 64),
 					constraints: BoxConstraints.expand(),
 					child: TabBarView(
 						controller: _controller,
-						children: _routes
+						children: _routes,						
 					),
 				),
 
@@ -110,11 +112,25 @@ class _NavContainerState extends State<NavContainer> with SingleTickerProviderSt
 							tabs: _tabs
 						)
 
-						: TabBar(
-							indicator: BoxDecoration(),
-							labelPadding: EdgeInsets.zero,
-							controller: _controller,
-							tabs: _tabs
+						: Container( 
+							decoration: BoxDecoration(
+								gradient: LinearGradient(
+									begin: Alignment.topCenter,
+									end: Alignment.bottomCenter,
+									colors: [
+										const Color.fromARGB(8, 16, 32, 16),
+										const Color.fromARGB(192, 32, 16, 32)
+									]
+								)
+							), 
+							child: TabBar(
+
+								indicator: BoxDecoration(),
+								labelPadding: EdgeInsets.only(bottom: 6, top: 4),
+								indicatorPadding: EdgeInsets.only(top: 6, bottom: 12),
+								controller: _controller,
+								tabs: _tabs
+							)
 						)
 					]
 				)

@@ -142,7 +142,7 @@ class DurationPickerComponent extends StatelessWidget {
 
 		return Padding(
 
-			padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+			padding: const EdgeInsets.only(left: 2.0, right: 2.0),
 			child: ClipRRect(
 
 				borderRadius: BorderRadius.all(Radius.circular(4.0)),
@@ -153,8 +153,8 @@ class DurationPickerComponent extends StatelessWidget {
 					child: ConstrainedBox(
 
 						constraints: BoxConstraints.expand(
-							height: (parent._root * 0.92), 
-							width: (parent._root * 0.76) 
+							height: (parent._root * 0.94), 
+							width: (parent._root * 0.84) 
 						),
 
 						child: ListWheelScrollView(
@@ -224,7 +224,7 @@ class TimePickerCard extends AnimatedWidget {
 								Text(
 									_index.toString(),
 									style: TextStyle(
-										color: Colors.orange[50].withOpacity(itemOpacity),
+										color: Colors.blueGrey[50].withOpacity(itemOpacity),
 										fontSize: 22,
 										fontWeight: FontWeight.w300
 									)

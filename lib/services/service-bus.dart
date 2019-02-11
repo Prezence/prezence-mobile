@@ -4,14 +4,14 @@
 import 'dart:async';
 import './media-bus.dart';
 import './device-info.dart';
-import './data-layer.dart';
+import './db.dart';
 
 abstract class ServiceBus {
 
 	static Future<void> init() async {
 
 		await DeviceInfo.init();
-		await DataLayer.init();
+		await DB.init();
 		return MediaBus.init();
 	}
 }

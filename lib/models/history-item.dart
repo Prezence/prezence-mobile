@@ -6,7 +6,11 @@ import '../types/utc-timestamp.dart';
 
 class HistoryItem extends DataModel {
 
-	HistoryItem(Duration duration) : minutes = duration.inMinutes;
+	HistoryItem(Duration duration) { 
+		
+		minutes = duration.inMinutes;
+		eventTimestamp = UTCTimestamp.now();
+	}
 
 	int id;
 	int minutes;
@@ -18,7 +22,7 @@ class HistoryItem extends DataModel {
 		return <String, dynamic> {
 			'id': id,
 			'minutes': minutes,
-			'event_timestamp:': eventTimestamp.toString()
+			'event_timestamp': eventTimestamp.toString()
 		};
 	}
 

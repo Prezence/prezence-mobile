@@ -6,7 +6,7 @@ import 'package:sqflite/sqflite.dart';
 import '../types/data-model.dart';
 import '../types/data-query.dart';
 
-abstract class DataLayer {
+abstract class DB {
 
 	static Database _db;
 
@@ -14,8 +14,15 @@ abstract class DataLayer {
 
 	static Future<void> init() async {
 
-		String _path = await getDatabasesPath() + 'prezence';
-		_db = await openDatabase(_path, version: DataLayer._version, onCreate: DataLayer.onCreate);
+		if (_db != null) { return; }
+
+		try {
+			String _path = await getDatabasesPath() + 'prezence';
+			_db = await openDatabase(_path, version: DB._version, onCreate: DB.onCreate);
+		}
+		catch(ex) {
+			print(ex);
+		}
 	}
 
 	static void onCreate(Database db, int version) async {
@@ -24,7 +31,7 @@ abstract class DataLayer {
 		await db.execute('CREATE TABLE settings (name TEXT PRIMARY KEY, value TEXT)');
 	}
 
-	static Future<List<Map<String, dynamic>>>  rawQuery(String sql) {
+	static Future<List<Map<String, dynamic>>> rawQuery(String sql) {
 		
 		return _db.rawQuery(sql);
 	}

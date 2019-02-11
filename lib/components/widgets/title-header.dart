@@ -16,6 +16,8 @@ class AnimatedTitleWidget extends AnimatedWidget {
 
 	Widget build(BuildContext context) {
 
+		final Color _color = Color.fromARGB(255, 115, 200, 182);
+
 		final Animation<Color> animation = listenable;
 
 		final TextStyle _style = Theme.of(context).textTheme.display2
@@ -29,7 +31,7 @@ class AnimatedTitleWidget extends AnimatedWidget {
 				children : <Widget>[
 					Text(
 						'Pre',
-						style: _style.copyWith(color: Colors.cyan)
+						style: _style.copyWith(color: _color)
 					),
 					Text(
 						'zen', 
@@ -37,7 +39,7 @@ class AnimatedTitleWidget extends AnimatedWidget {
 					),
 					Text(
 						'ce', 
-						style: _style.copyWith(color: Colors.cyan)
+						style: _style.copyWith(color: _color)
 					),
 				]
 			)
@@ -77,7 +79,9 @@ class TitleHeaderState extends State<TitleHeader> with SingleTickerProviderState
 	@override
 	Widget build(BuildContext context) {
 
-		_colorTween = ColorTween(begin: Colors.cyan, end: Colors.orange)
+		final Color _color = Color.fromARGB(255, 115, 200, 182);
+
+		_colorTween = ColorTween(begin: _color, end: Color.fromARGB(255, 199, 178, 53) )
 			.animate(_animationController)
 				..addListener(() { setState(() { }); });
 

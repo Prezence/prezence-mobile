@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import '../../types/nav-route.dart';
 import '../../routes/timer-countdown.dart';
+import '../../routes/history.dart';
 import './background-video.dart';
 import './nav-container.dart';
 
@@ -36,6 +37,9 @@ class _AppContainerState extends State<AppContainer> with SingleTickerProviderSt
 
 		switch (settings.name) {
 
+			case '/history':
+			return MaterialPageRoute( builder: (BuildContext _) => HistoryScreen() );
+
 			case '/timer':
 			return MaterialPageRoute( builder: (BuildContext _) => TimerCountdownScreen() );
 
@@ -48,16 +52,23 @@ class _AppContainerState extends State<AppContainer> with SingleTickerProviderSt
 	@override
 	Widget build(BuildContext context) {
 
-		return Scaffold(
+		return WillPopScope(
 
-			body: Stack(
+			onWillPop: () {
+				print('pop');
+				
+			 },
+			child: Scaffold(
 
-				alignment: AlignmentDirectional.topStart,
-				children: <Widget>[
-					
-					BackgroundVideo(assetName: 'assets/videos/zenstones.mp4'),
-					Navigator(onGenerateRoute: _onGenerateRoute)
-				]
+				body: Stack(
+
+					alignment: AlignmentDirectional.topStart,
+					children: <Widget>[
+						
+						BackgroundVideo(assetName: 'assets/videos/zenstones.mp4'),
+						Navigator(onGenerateRoute: _onGenerateRoute)
+					]
+				)
 			)
 		);
     }

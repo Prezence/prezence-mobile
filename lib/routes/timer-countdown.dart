@@ -2,8 +2,10 @@
 // @author Kenneth Reilly <kenneth@innovationgroup.tech>
 
 import 'package:flutter/material.dart';
+import 'package:screen/screen.dart';
 import '../components/widgets/smart-button.dart';
 import '../components/widgets/countdown-gauge.dart';
+import '../services/navigation-bus.dart';
 import '../services/timer-bus.dart';
 import '../services/media-bus.dart';
 import '../services/app-metrics.dart';
@@ -28,6 +30,7 @@ class TimerCountdownScreenState extends State<TimerCountdownScreen> with SingleT
 		TimerBus.registerCompletedListener(_onTimerComplete);
 
 		TimerBus.start();
+		Screen.keepOn(true);
 
 		try { MediaBus.playSoundEffect('bell-strike-1.mp3'); }
 		catch(ex) { print(ex); }
@@ -46,13 +49,15 @@ class TimerCountdownScreenState extends State<TimerCountdownScreen> with SingleT
 
 	void _onTimerComplete(TimerCompletedEvent event) {
 
+		Screen.keepOn(true);
+
 		if (mounted) {
 
 			AppMetrics.logSession(TimerBus.initialDuration);
 			
 			MediaBus.playSoundEffect('bell-strike-2.mp3');
 			
-			Navigator.popUntil(context, (Route route) => route.isFirst);
+			NavigationBus.returnTo(context, '/home');
 		}
 	}
 
@@ -72,29 +77,31 @@ class TimerCountdownScreenState extends State<TimerCountdownScreen> with SingleT
 
 				Container(constraints: BoxConstraints.expand(height: geometry.rootEighth)),
 				
-				ButtonGroup(
-					buttons: [
+				Padding(
+					padding: const EdgeInsets.all(12.0),
+					child: ButtonGroup(
+						buttons: [
+							SmartButton(
+								text: TimerBus.isRunning ? 'pause' : 'resume',
+								onPressed: () {
 
-						SmartButton(
-							text: TimerBus.isRunning ? 'pause' : 'resume',
-							onPressed: () {
+									TimerBus.isRunning 
+										? TimerBus.stop() 
+										: TimerBus.start();
 
-								TimerBus.isRunning 
-								 	? TimerBus.stop() 
-									: TimerBus.start();
+									setState(() { });
+								}
+							),
+							SmartButton(
+								text: 'cancel',
+								onPressed: () {
 
-								setState(() { });
-							}
-						),
-						SmartButton(
-							text: 'cancel',
-							onPressed: () {
-
-								TimerBus.clear();
-								Navigator.pop(context); 
-							}
-						)
-					]
+									TimerBus.clear();
+									Navigator.pop(context); 
+								}
+							)
+						]
+					),
 				)
 			]
 		);

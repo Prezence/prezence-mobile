@@ -48,21 +48,25 @@ class HomeTabSetTimerState extends State<HomeTabSetTimer> {
 			mainAxisAlignment: MainAxisAlignment.spaceBetween,
 			children: <Widget>[
 
-				Container(constraints: BoxConstraints.expand(height: geometry.rootThird)),
-
 				SubPageHeader(text: 'Set Timer'),
 
 				Container(constraints: BoxConstraints.expand(height: geometry.rootQuarter)),
+				
+				Padding(
+					padding: const EdgeInsets.only(left: 8, right: 8, bottom: 16),
+					child: _durationPicker,
+				),
 
-				_durationPicker,
-
-				ButtonGroup(
-					buttons: [
-						SmartButton(
-							text: 'start',
-							onPressed: _duration.inMinutes > 0 ? _onPressStart : null
-						)
-					]
+				Padding(
+					padding: const EdgeInsets.only(left: 12, right: 12, bottom: 16),
+					child: ButtonGroup(
+						buttons: [
+							SmartButton(
+								text: 'start',
+								onPressed: _duration.inMinutes > 0 ? _onPressStart : null
+							)
+						]
+					),
 				)
 			]
 		);
