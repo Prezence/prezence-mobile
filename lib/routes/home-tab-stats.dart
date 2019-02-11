@@ -4,12 +4,49 @@
 import 'package:flutter/material.dart';
 import '../components/widgets/title-header.dart';
 import '../components/widgets/history-card.dart';
+import '../services/navigation-bus.dart';
+import '../services/app-metrics.dart';
+import '../types/meditation-stats.dart';
 
-class HomeTabStats extends StatelessWidget {
+class HomeTabStats extends StatefulWidget {
 
 	const HomeTabStats({
 		Key key,
 	}) : super(key: key);
+
+	@override
+	HomeTabStatsState createState() => new HomeTabStatsState();
+}
+
+class HomeTabStatsState extends State<HomeTabStats> {
+
+	MeditationStats _stats = MeditationStats.empty();
+
+	Future<void> onPressHistory(context) async {
+
+		await NavigationBus.navigateTo(
+			context: context, 
+			route: _stats.lastSession == null ? '/set-timer' : '/history'
+		);
+
+		refresh();
+	}
+	
+	void refresh() async {
+
+		try {
+			_stats = await AppMetrics.getStats();
+			setState(() { });
+		}
+		catch(ex) { }
+	}
+
+	@override
+	void initState() {
+
+		refresh();
+    	super.initState();		
+  	}
 
 	@override
 	Widget build(BuildContext context) {
@@ -29,14 +66,17 @@ class HomeTabStats extends StatelessWidget {
 				TitleHeader(),
 				
 				Padding(
-					padding: EdgeInsets.only(
-						bottom: 24,
-						left: 8,
-						right: 8
+					padding: EdgeInsets.only(						
+						left: 12,
+						right: 12,
+						bottom: 16
 					),
 					child: ConstrainedBox(					
 						constraints: BoxConstraints.expand(height: _navItemSize.height),
-						child: HistoryCard()
+						child: HistoryCard(
+							stats: _stats,
+							onPressed: () { onPressHistory(context); },
+						)
 					)				
 				)
 			],

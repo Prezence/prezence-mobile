@@ -43,21 +43,11 @@ class NavTabIconState extends State<NavTabIcon> {
 				if (opacity < 0.26) { opacity = 0.26; }
 
 				return Container(
-					constraints: BoxConstraints.expand(),
-					decoration: BoxDecoration(
-						gradient: LinearGradient(
-							begin: Alignment.topCenter,
-							end: Alignment.bottomCenter,
-							colors: [
-								const Color.fromARGB(8, 16, 32, 16),
-								const Color.fromARGB(192, 32, 16, 32)
-							]
-						)
-					),
+					constraints: BoxConstraints.expand(),					
 					child: Padding(
 						padding: Platform.isAndroid 
 							? EdgeInsets.only(bottom: 4, top: 8)
-							: EdgeInsets.only(bottom: 16),
+							: EdgeInsets.only(bottom: 12),
 						child: Opacity(
 							opacity: opacity,
 							child: widget._icon

@@ -2,10 +2,8 @@
 // @author Kenneth Reilly <kenneth@innovationgroup.tech>
 
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
-
 
 class TabAnimationEvent { }
 class AppNavEvent { AppNavEvent(this.route); String route; }
@@ -44,23 +42,35 @@ abstract class NavigationBus {
 		_bus.fire(AppNavEvent('/'));
 	}
 
-	static Future<void> returnTo(String route) {
+	static Future<void> returnTo(BuildContext context, String route) {
 
 		switch (route) {
 
+			case '/home':
+				Navigator.popUntil(context, (Route route) => route.isFirst);
+				_tabController.animateTo(0);
+				break;
+				
 			case '/':
-			case '/':
+
 			return null;
 		}
 
 		return null;
 	}
 
-	static Future<void> navigateTo(String route) {
+	static Future<dynamic> navigateTo({ BuildContext context, String route }) async {
 
 		switch (route) {
 
-			case '/':
+			case '/set-timer':
+				_tabController.animateTo(1);
+				break;
+
+			case '/history':
+				return await Navigator.pushNamed(context, '/history');
+				
+
 			case '/':
 			return null;
 		}

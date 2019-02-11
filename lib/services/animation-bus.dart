@@ -93,7 +93,4 @@ abstract class AnimationBus {
 		
 		return _bus.on<AnimationTabScrollEvent>().listen(listener);
 	}
-
-
-
 }

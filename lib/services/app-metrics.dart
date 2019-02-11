@@ -9,27 +9,34 @@ import './app-storage.dart';
 
 abstract class AppMetrics {
 
-	// const MetricsService({  });
+	static Future<List<HistoryItem>> getHistory() async {
 
-	static Future<dynamic> getStats() async {
+		try {return AppStorage.getHistory(); }
+		catch(ex) { return Future.value(List()); }
+	}
+
+	static Future<MeditationStats> getStats() async {
 		
 		try {
 			MeditationTotals totals = await AppStorage.getTotals();
 			UTCTimestamp lastSession = await AppStorage.getLastSession();
 			MeditationStats stats = MeditationStats(lastSession: lastSession, totals: totals);
 			return stats;
-
 		}
-		catch(ex) {
-			print(ex);
-		}
+		catch(ex) { print(ex); }
 
 		return MeditationStats.empty();
 	}
 
-	static Future<void> logSession(Duration duration) {
+	static Future<void> logSession(Duration duration) async {
 
 		HistoryItem item = new HistoryItem(duration);
 		return AppStorage.logHistoryItem(item);
 	}
+
+	static Future<void> clear() {
+
+		try { return AppStorage.clearHistory(); }
+		catch(ex) { return Future.value(false); }
+	}	
 }

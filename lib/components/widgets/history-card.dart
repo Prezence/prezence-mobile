@@ -4,12 +4,62 @@
 import 'package:flutter/material.dart';
 import '../../services/app-metrics.dart';
 import '../../types/meditation-stats.dart';
-import '../../services/navigation-bus.dart';
 import '../../types/utc-timestamp.dart';
 
-class AnimatedStatsWidget extends AnimatedWidget {
+class HistoryCard extends StatefulWidget {
 
-	AnimatedStatsWidget({ 
+	const HistoryCard({ 
+		Key key,
+		@required this.stats,
+		this.onPressed 
+	}) : super(key: key);
+
+	@override
+	HistoryCardState createState() => new HistoryCardState();
+
+	final MeditationStats stats;
+	final Function onPressed;
+}
+
+class HistoryCardState extends State<HistoryCard> with SingleTickerProviderStateMixin {
+
+	AnimationController _animationController;
+	Animation _colorTween;
+	
+	@override
+	void initState() {
+
+		super.initState();
+		_animationController = AnimationController(vsync: this, duration: Duration(milliseconds:400));
+		_animationController.forward();
+	}
+
+	@override
+	void dispose() {
+
+		_animationController.dispose();
+		super.dispose();
+	}
+
+	@override
+	Widget build(BuildContext context) {
+
+		_colorTween = ColorTween(begin: Colors.black26, end: Colors.blueGrey[50])
+			.animate(_animationController)
+				..addListener(() { setState(() { }); });
+
+		return AnimatedCardWidget(
+			animation: _colorTween, 
+			stats: widget.stats,
+			onPressed: widget.onPressed
+		);
+	}
+}
+
+
+class AnimatedCardWidget extends AnimatedWidget {
+
+	AnimatedCardWidget({ 
 		Key key, 
 		Animation<Color> animation, 
 		MeditationStats stats,
@@ -28,26 +78,31 @@ class AnimatedStatsWidget extends AnimatedWidget {
 			return "Click here to start!";
 		}
 
-		String _base = "Last session: ";
+		String _base = "Last Session: ";
 		DateTime then = session.dateTime;
 		DateTime now = DateTime.now();
 
-		if (then.difference(now) > Duration(days: 2)) {
+		if (now.difference(then) > Duration(days: 2)) {
 			return _base + then.toLocal().toString().split(' ')[0];
 		}
-		else if (then.difference(now) > Duration(days: 1)) {
+		else if (now.difference(then) > Duration(days: 1)) {
 			return _base + "Yesterday"; //+ then.toLocal().toString().split(' ')[1];
 		}
+		else if (now.difference(then) > Duration(hours: 1)) {		
+			return _base + now.difference(then).inHours.toString() + " hours ago";  // + then.toLocal().toString().split(' ')[1];
+		}
+		else if (now.difference(then) > Duration(minutes: 1)) {
+			return _base + now.difference(then).inMinutes.toString() + " minutes ago";
+		}
 		else {
-			return _base + "Today"; // + then.toLocal().toString().split(' ')[1];
+			return _base + now.difference(then).inSeconds.toString() + " seconds ago";
 		}
 	}
 
 	get totalMinutesString {
 		
-		return (_stats.totals.totalMinutes == null)
-			? "No meditation history."
-			: 'Minutes meditated: ' +  _stats.totals.totalMinutes.toString();
+		if (_stats.totals.totalMinutes == null) { return "No meditation history."; }
+		return "Running Total: " + _stats.totals.totalTimeString;
 	}
 
 	Widget build(BuildContext context) {
@@ -71,131 +126,74 @@ class AnimatedStatsWidget extends AnimatedWidget {
 			.copyWith(			
 				fontWeight: FontWeight.w200,
 				shadows: [ _shadow ],
-				fontSize: 18.0
+				fontSize: 16.0
 			);
 
 		return Card(
 			
-			margin: EdgeInsets.all(24),
+			margin: EdgeInsets.all(0),
 			color: Colors.black38,
 			elevation: 6,
-			child: RawMaterialButton(
-				
-				//padding: EdgeInsets.all(16),
-				onPressed: _onPressed,
-				child: Column(
+			child: Container(
+				padding: EdgeInsets.all(0),
+				margin: EdgeInsets.all(0),
+				decoration: BoxDecoration(
+					border: Border.all(color: Colors.black26)
+				),
+			  	child: RawMaterialButton(
+			  	
+					//padding: EdgeInsets.all(16),
+					onPressed: _onPressed,
+					child: Column(
 
-					mainAxisAlignment: MainAxisAlignment.spaceBetween,
-					crossAxisAlignment: CrossAxisAlignment.stretch,
-					children: <Widget>[
-						
-						Container(							
-							padding: EdgeInsets.only(
-								top: 12,
-								bottom: 12,
-								left: 16
-							),
-							decoration: BoxDecoration(
-								color: Colors.black45,
-								border: Border(
-									bottom: BorderSide(
-										color: Colors.grey[600]
+						mainAxisAlignment: MainAxisAlignment.spaceBetween,
+						crossAxisAlignment: CrossAxisAlignment.stretch,
+						children: <Widget>[
+							
+							Container(						
+								padding: EdgeInsets.only(
+									top: 12,
+									bottom: 12,
+									left: 16
+								),
+								decoration: BoxDecoration(
+									color: Colors.black45,
+									border: Border(
+										bottom: BorderSide(
+											color: Colors.grey[600]
+										)
 									)
-								)
+								),
+								child: Text(
+									'History',
+									style: _headerStyle.copyWith(color: animation.value)
+								),
 							),
-							child: Text(
-								'History',
-								style: _headerStyle.copyWith(color: animation.value)
+							Container(
+								padding: EdgeInsets.only(
+									top: 12,
+									bottom: 12,								
+									left: 32
+								),
+								child: Text(
+									totalMinutesString,
+									style: _style.copyWith(color: animation.value)
+								),
 							),
-						),
-						Container(
-							padding: EdgeInsets.only(
-								top: 16,
-								bottom: 12,
-								left: 24
-							),
-						  	child: Text(
-							  	totalMinutesString,
-							  	style: _style.copyWith(color: animation.value)
-							),
-						),
-						Container(
-							padding: EdgeInsets.only(
-								top: 8,
-								bottom: 24,
-								left: 24
-							),
-							child: Text(
-								lastSessionString, 
-								style: _style.copyWith(color: animation.value)
-							),
-						)
-					]
-				)
+							Container(
+								padding: EdgeInsets.only(								
+									bottom: 48,
+									left: 32
+								),
+								child: Text(
+									lastSessionString, 
+									style: _style.copyWith(color: animation.value)
+								),
+							)
+						]
+					)
+				),
 			)
-		);
-	}
-}
-
-class HistoryCard extends StatefulWidget {
-
-	const HistoryCard({ Key key }) : super(key: key);
-
-	@override
-	HistoryCardState createState() => new HistoryCardState();
-}
-
-class HistoryCardState extends State<HistoryCard> with SingleTickerProviderStateMixin {
-
-	AnimationController _animationController;
-
-	Animation _colorTween;
-
-	MeditationStats _stats = MeditationStats.empty();
-
-	@override
-	void initState() {
-
-		super.initState();
-	
-		_animationController = AnimationController(vsync: this, duration: Duration(milliseconds:400));
-		_animationController.forward();
-
-		refresh();
-	}
-
-	@override
-	void dispose() {
-
-		_animationController.dispose();
-		super.dispose();
-	}
-
-	void refresh() async {
-
-		_stats = await AppMetrics.getStats();
-		setState(() {  });
-	}
-
-	void _onPressed() {
-
-		if (_stats.lastSession == null) {
-			NavigationBus.navigateTo('/set-timer');
-		}
-		// AppStorage.test().then(setState);
-	}
-
-	@override
-	Widget build(BuildContext context) {
-
-		_colorTween = ColorTween(begin: Colors.black26, end: Colors.blueGrey[50])
-			.animate(_animationController)
-				..addListener(() { setState(() { }); });
-
-		return AnimatedStatsWidget(
-			animation: _colorTween, 
-			stats: _stats,
-			onPressed: _onPressed
 		);
 	}
 }

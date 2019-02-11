@@ -5,6 +5,7 @@ import 'dart:async';
 // import 'package:path_provider/path_provider.dart';
 import '../types/meditation-stats.dart';
 import '../types/utc-timestamp.dart';
+import '../types/data-query.dart';
 import '../models/history-item.dart';
 import '../services/db.dart';
 
@@ -25,6 +26,15 @@ class AppStorage {
 	static Future<int> logHistoryItem(HistoryItem item) async {
 
 		return DB.insert('history', item);
+	}
+
+	static Future<List<HistoryItem>> getHistory() async {
+		
+		List<String> _columns = ['id', 'minutes', 'event_timestamp'];
+		List<Map<String, dynamic>> _result = await DB.query('history', DataQuery(columns: _columns));
+
+		Iterable<HistoryItem> _items = _result.map((Map<String, dynamic> item) => new HistoryItem.fromMap(item));
+		return _items.toList();
 	}
 
 	static Future<MeditationTotals> getTotals() async {
@@ -64,5 +74,10 @@ class AppStorage {
 		for (Map<String, dynamic> item in _result) {
 			print(item);
 		}
+	}
+
+	static Future<void> clearHistory() async {
+
+		return await DB.rawQuery('delete from history');
 	}
 }

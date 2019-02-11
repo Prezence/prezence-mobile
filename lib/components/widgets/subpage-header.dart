@@ -25,7 +25,7 @@ class AnimatedSubtitleWidget extends AnimatedWidget {
 
 		return ConstrainedBox(
 
-			constraints: BoxConstraints.expand(height: 200),
+			constraints: BoxConstraints.expand(height: 240),
 			child: Row(
 				mainAxisAlignment: MainAxisAlignment.center,
 				children : <Widget>[
